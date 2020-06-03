@@ -34,42 +34,51 @@ function App() {
   function handleLogin(e) {
     e.preventDefault();
     if(validateForm()){
-      let ctrl = 'sms_list'; //user_info   sms_list
+      let ctrl = 'user_info'; //user_info   sms_list
       let call = new Date().getTime().toString();
       let encrPwd = md5(md5(credentials.password)+call);
-      let service = 'sms';  //general
+      let service = 'general';  //general   sms
       let from = '2000-01-01';
       let to = '2020-06-02';
       console.log('credentials', credentials);
-      // postLogin('https://api.profisms.cz', call, encrPwd);  // Error 50 - USER_MISSING  
-      postLogin(`https://api.profisms.cz?CTRL=${ctrl}&_login=${credentials.username}&_service=${service}&_call=${call}&_password=${encrPwd}
-        &from=${from}&to=${to}
-        `);
+      // let toSend = {
+      //     CTRL: ctrl,
+      //     _login: credentials.username,
+      //     _service: service,
+      //     _call: call,
+      //     _password: encrPwd,
+      //     from: from,
+      //     to: to
+      //   }
+      // postLogin('https://api.profisms.cz', toSend);  // Error 50 - USER_MISSING  
+      postLogin(`https://api.profisms.cz?CTRL=${ctrl}&_login=${credentials.username}&_service=${service}&_call=${call}&_password=${encrPwd}`);
+        // &from=${from}&to=${to}`);
     }
   }
 
-  async function postLogin(url, call, encrPwd) {
-    try{
-      console.log('credentials.username', credentials.username);
+  function handleLogout(e) {
+    e.preventDefault();
+    setCredentials({
+      username: '',
+      password: ''
+    });
+    setIsLoggedin({isLoggedIn: false});
+  }
 
+  async function postLogin(url, toSend) {
+    try{
+      // console.log('credentials.username', credentials.username);
       const response = await fetch(url, {
         method: 'POST',
         headers: {
             // 'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            CTRL: "user_info",
-            _login: unescape(encodeURIComponent(credentials.username)),
-            _service: 'general',
-            _call: call,
-            _password: encrPwd,
-          }),
+        // body: JSON.stringify(toSend),
       });
-      console.log('status', response.status);
+      // console.log('status', response.status);
       const data = await response.json();
-      console.log('data', data);
-      if(data.error.code===0){
-        console.log('data.error.code', data.error.code);
+      // console.log('data', data);
+      if(data.error.message==='OK'){
         setIsLoggedin(true);
       }
 
@@ -82,20 +91,37 @@ function App() {
 
   return (
     <div className="app">
-      <NavBar />
+      <NavBar 
+        credentials={credentials}
+        // handleChange={handleChange}
+        // handleLogin={handleLogin}
+        isLoggedIn={isLoggedIn}
+      />
       <Switch>
-        <Route exact path='/' render={(props) => ( //component={LoginForm} 
+        <Route exact path='/' render={(props) => ( 
           <LoginForm {...props}
             credentials={credentials}
             emptyUNmsg={emptyUNmsg}
             emptyPWmsg={emptyPWmsg}
             handleChange={handleChange}
             handleLogin={handleLogin}
+            handleLogout={handleLogout}
+            isLoggedIn={isLoggedIn}
           />
         )}/>
-        <Route path='/user-information' component={UserInformation}/>
-        <Route path='/sms-list' component={SMSList}/>
-        <Route path='/send-sms' component={SendSMS}/>
+        <Route path='/user-information' render={(props) => ( 
+          <UserInformation {...props}
+            credentials={credentials}
+            isLoggedIn={isLoggedIn}
+          />
+        )}/>
+        <Route path='/sms-list' render={(props) => (
+          <SMSList {...props}
+            credentials={credentials}
+            isLoggedIn={isLoggedIn}
+          />
+        )}/>
+          <Route path='/send-sms' component={SendSMS}/>
       </Switch>
 
     </div>

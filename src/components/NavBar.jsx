@@ -19,7 +19,6 @@ import "./NavBar.scss";
 
 export default function NavBar(props){
   const [isOpen, setIsOpen] = useState(false);
-
   const toggle = () => setIsOpen(!isOpen);
 
   return (
@@ -28,26 +27,36 @@ export default function NavBar(props){
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
-            <NavItem>
-              <NavLink>
-                {/* <Link to='/'>Home</Link> */}
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink>
-                {/* <Link to='/user-information'>User information</Link>                 */}
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink>
-                {/* <Link to='/sms-list'>SMS List</Link>                 */}
-              </NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink>
-                {/* <Link to='/send-sms'>Send SMS</Link>                 */}
-              </NavLink>
-            </NavItem>
+            {props.isLoggedIn ? (
+              <>
+              <NavItem>
+                <NavLink>
+                  <Link to='/'>Home</Link>
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink>
+                  <Link to='/user-information'>User information</Link>                
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink>
+                  <Link to='/sms-list'>SMS List</Link>                
+                </NavLink>
+              </NavItem>
+              <NavItem>
+                <NavLink>
+                  <Link to='/send-sms'>Send SMS</Link>                
+                </NavLink>
+              </NavItem>
+              </>
+            ):(
+              <NavItem>
+                <NavLink>
+                  <Link to='/'>Log in</Link>
+                </NavLink>
+              </NavItem>
+            )}
             {/* <UncontrolledDropdown nav inNavbar>
               <DropdownToggle nav caret>
                 Options
