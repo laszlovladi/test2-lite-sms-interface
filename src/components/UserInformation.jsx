@@ -19,14 +19,10 @@ export default function UserInformation(props) {
       let url = `https://api.profisms.cz?CTRL=${ctrl}&_login=${props.credentials.username}&_service=${service}&_call=${call}&_password=${encrPwd}`;
       const response = await fetch(url, {
         method: 'POST',
-        headers: {
-            // 'Content-Type': 'application/json',
-        },
+        headers: {},
         // body: JSON.stringify(toSend),
       });
-      // console.log('status', response.status);
       const data = await response.json();
-      console.log('data', data);
       if(data.error.message==='OK'){
         setUserData(data);
       }
@@ -48,7 +44,7 @@ export default function UserInformation(props) {
                   <div>
                     <h3>Contacts</h3>
                     <div className="contactContainer">
-                      <div className="p-3 bg-primary my-2 rounded d-flex flex-wrap">
+                      <div className="p-3 bg-info my-2 rounded d-flex flex-wrap">
                         {userData.data.contact.map((contact, index) => (
                           <Toast key={index}>
                             <ToastHeader>{contact.type}</ToastHeader>
@@ -72,7 +68,7 @@ export default function UserInformation(props) {
                   <div>
                     <h3>Address</h3>
                     <div className="addressContainer">
-                      <div className="p-3 bg-primary my-2 rounded d-flex flex-wrap">
+                      <div className="p-3 bg-info my-2 rounded d-flex flex-wrap">
                         {userData.data.address.map((address, index) => (
                           <Toast key={index}>
                             <ToastHeader>Type {address.type}</ToastHeader>
@@ -117,7 +113,7 @@ export default function UserInformation(props) {
                   <div>
                     <h3>Accounts</h3>
                     <div className="accountsContainer">
-                      <div className="p-3 bg-primary my-2 rounded d-flex flex-wrap">
+                      <div className="p-3 bg-info my-2 rounded d-flex flex-wrap">
                         {userData.data.account.map((account, index) => (
                           <Toast key={index}>
                             <ToastHeader>Account no. {account.number}</ToastHeader>

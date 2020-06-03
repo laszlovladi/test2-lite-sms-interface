@@ -5,7 +5,7 @@ import LoginForm from './components/LoginForm.jsx'
 import UserInformation from './components/UserInformation.jsx'
 import SMSList from './components/SMSList.jsx'
 import SendSMS from './components/SendSMS.jsx'
-import {Switch, Route} from 'react-router-dom';
+import {Switch, Route, Redirect} from 'react-router-dom';
 const md5 = require('md5');
 
 function App() {
@@ -38,9 +38,6 @@ function App() {
       let call = new Date().getTime().toString();
       let encrPwd = md5(md5(credentials.password)+call);
       let service = 'general';  //general   sms
-      let from = '2000-01-01';
-      let to = '2020-06-02';
-      console.log('credentials', credentials);
       // let toSend = {
       //     CTRL: ctrl,
       //     _login: credentials.username,
@@ -52,7 +49,6 @@ function App() {
       //   }
       // postLogin('https://api.profisms.cz', toSend);  // Error 50 - USER_MISSING  
       postLogin(`https://api.profisms.cz?CTRL=${ctrl}&_login=${credentials.username}&_service=${service}&_call=${call}&_password=${encrPwd}`);
-        // &from=${from}&to=${to}`);
     }
   }
 
@@ -67,17 +63,12 @@ function App() {
 
   async function postLogin(url, toSend) {
     try{
-      // console.log('credentials.username', credentials.username);
       const response = await fetch(url, {
         method: 'POST',
-        headers: {
-            // 'Content-Type': 'application/json',
-        },
+        headers: {},
         // body: JSON.stringify(toSend),
       });
-      // console.log('status', response.status);
       const data = await response.json();
-      // console.log('data', data);
       if(data.error.message==='OK'){
         setIsLoggedin(true);
       }
@@ -93,8 +84,6 @@ function App() {
     <div className="app">
       <NavBar 
         credentials={credentials}
-        // handleChange={handleChange}
-        // handleLogin={handleLogin}
         isLoggedIn={isLoggedIn}
       />
       <Switch>
@@ -109,20 +98,31 @@ function App() {
             isLoggedIn={isLoggedIn}
           />
         )}/>
-        <Route path='/user-information' render={(props) => ( 
+        <Route path='/user-information' render={(props) => isLoggedIn ? ( 
           <UserInformation {...props}
             credentials={credentials}
             isLoggedIn={isLoggedIn}
           />
-        )}/>
-        <Route path='/sms-list' render={(props) => (
+          ):(
+            <Redirect to="/" />
+          )}/>
+        <Route path='/sms-list' render={(props) => isLoggedIn ?  (
           <SMSList {...props}
             credentials={credentials}
             isLoggedIn={isLoggedIn}
           />
-        )}/>
-          <Route path='/send-sms' component={SendSMS}/>
-      </Switch>
+          ):(
+            <Redirect to="/" />
+          )}/>  
+        <Route path='/send-sms' render={(props) => isLoggedIn ? (
+          <SendSMS {...props}
+            credentials={credentials}
+            isLoggedIn={isLoggedIn}
+          />
+          ):(
+            <Redirect to="/" />
+          )}/>
+        </Switch>
 
     </div>
   );

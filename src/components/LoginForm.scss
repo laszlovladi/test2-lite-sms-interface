@@ -1,4 +1,3 @@
-// @media all and (min-width: 480px) {
   .loginContainer{
     width: 100vw;
     height: 85vh;
@@ -9,17 +8,15 @@
 
   .loginForm {
     margin: 3rem auto;
-    width: 320px;
     border: solid lightgrey 1px;
     border-radius: 1em;
 
     .loginHeader{
       border-radius: 1em 1em 0 0;
       padding: 1em;
-      background-color: lightblue;
+      background-color: #5bc0de;
     }
     .loginBody{
       padding: 1em;
     }
   }
-// }

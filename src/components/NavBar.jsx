@@ -1,21 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
-import {
-  Collapse,
-  Navbar,
-  NavbarToggler,
-  NavbarBrand,
-  Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem,
-  NavbarText
-} from 'reactstrap';
-import "./NavBar.scss";
-
+import {  Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem} from 'reactstrap';
 
 export default function NavBar(props){
   const [isOpen, setIsOpen] = useState(false);
@@ -30,54 +15,36 @@ export default function NavBar(props){
             {props.isLoggedIn ? (
               <>
               <NavItem>
-                <NavLink>
+                <div style={{padding: '8px'}}>
                   <Link to='/'>Home</Link>
-                </NavLink>
+                </div>
               </NavItem>
               <NavItem>
-                <NavLink>
+                <div style={{padding: '8px'}}>
                   <Link to='/user-information'>User information</Link>                
-                </NavLink>
+                </div>
               </NavItem>
               <NavItem>
-                <NavLink>
+                <div style={{padding: '8px'}}>
                   <Link to='/sms-list'>SMS List</Link>                
-                </NavLink>
+                </div>
               </NavItem>
               <NavItem>
-                <NavLink>
+                <div style={{padding: '8px'}}>
                   <Link to='/send-sms'>Send SMS</Link>                
-                </NavLink>
+                </div>
               </NavItem>
               </>
             ):(
               <NavItem>
-                <NavLink>
+                <div style={{padding: '8px'}}>
                   <Link to='/'>Log in</Link>
-                </NavLink>
+                </div>
               </NavItem>
             )}
-            {/* <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Options
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>
-                  Option 1
-                </DropdownItem>
-                <DropdownItem>
-                  Option 2
-                </DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>
-                  Reset
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown> */}
           </Nav>
-          {/* <NavbarText>Simple Text</NavbarText> */}
         </Collapse>
-        <NavbarBrand href="/">Lite SMS interface</NavbarBrand>
+        <NavbarBrand>Lite SMS interface</NavbarBrand>
       </Navbar>
     </div>
   );
